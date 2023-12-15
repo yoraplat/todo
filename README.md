@@ -4,6 +4,7 @@
 ## Backend
 
 ### 1. Create .env file
+
 Create a `.env` file in the Laravel backend directory (`./laravel`) and add the following:
 
     POSTMARK_TOKEN=your_postmark_token
@@ -11,6 +12,7 @@ Create a `.env` file in the Laravel backend directory (`./laravel`) and add the 
 ### 2. Serve the backend
 Run the following command to start the Laravel development server:
 
+    composer install
     php artisan serve
 
 ### 3. Run migrations
@@ -24,6 +26,7 @@ Seed the database with test data using:
     php artisan db:seed
 
 ### 5. Run tests
+
 Execute tests (note: running tests will clear the database):
 
     php artisan test
@@ -32,6 +35,7 @@ Execute tests (note: running tests will clear the database):
 ### 1. Serve the Frontend
 Navigate to the Vue.js frontend directory (`./vue`) and run:
 
+    npm i
     npm run serve
 
 ### 2. Login
