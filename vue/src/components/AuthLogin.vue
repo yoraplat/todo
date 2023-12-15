@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mb-3">
       <form @submit.prevent="login">
         <div class="flex flex-col">
           <input class="text-center border-b-2 py-2 border-b-black text-black outline-0 placeholder:text-black" type="text" placeholder="Email" v-model="email" required />
@@ -17,6 +17,7 @@
         </div>
       </form>
     </div>
+    <router-link to="/register">Register</router-link>
 </template>
 <script>
 import AuthService from "@/services/AuthService";
@@ -36,7 +37,6 @@ export default {
         email: this.email,
         password: this.password,
       };
-      this.error = null;
       try {
         this.failedLogin = false
         this.isLoading = true
@@ -45,12 +45,6 @@ export default {
         this.isLoading = false
         if (authUser) {
           this.$router.push("/");
-        } else {
-          const error = Error(
-            "Unable to fetch user after login, check your API settings."
-          );
-          error.name = "Fetch User";
-          throw error;
         }
       } catch (error) {
         this.isLoading = false

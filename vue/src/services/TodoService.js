@@ -18,8 +18,7 @@ todoClient.interceptors.response.use(
     if (
       error.response &&
       [401, 419].includes(error.response.status) &&
-      store.getters["auth/authUser"] &&
-      !store.getters["auth/guest"]
+      store.getters["auth/authUser"]
     ) {
       store.dispatch("auth/logout");
     }
@@ -29,7 +28,6 @@ todoClient.interceptors.response.use(
 
 export default {
   async getByUserId(user_id) {
-    // await todoClient.get("/sanctum/csrf-cookie");
     return todoClient.get(`/api/todos/user/${user_id}`);
   },
   async finishTodo(todo) {

@@ -2,6 +2,7 @@ import store from "@/store/index";
 import { createRouter, createWebHistory } from 'vue-router';
 import DashboardView from '../views/DashboardView'
 import LoginView from '../views/LoginView'
+import RegisterView from '../views/RegisterView'
 
 const routes = [
   {
@@ -14,13 +15,18 @@ const routes = [
     component: LoginView,
     meta: { requiresAuth: false },
   },
+  {
+    path: '/register',
+    component: RegisterView,
+    meta: { requiresAuth: false },
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
-// const authUser = store.getters["auth/authUser"];
+
 router.beforeEach(async (to, from, next) => {
   await store.dispatch("auth/getAuthUser");
   const authUser = store.getters["auth/authUser"];

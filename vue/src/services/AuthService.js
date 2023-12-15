@@ -18,8 +18,7 @@ authClient.interceptors.response.use(
     if (
       error.response &&
       [401, 419].includes(error.response.status) &&
-      store.getters["auth/authUser"] &&
-      !store.getters["auth/guest"]
+      store.getters["auth/authUser"]
     ) {
       store.dispatch("auth/logout");
     }
@@ -35,28 +34,11 @@ export default {
   logout() {
     return authClient.post("/logout");
   },
-  async forgotPassword(payload) {
-    await authClient.get("/sanctum/csrf-cookie");
-    return authClient.post("/forgot-password", payload);
-  },
   async getAuthUser() {
     return await authClient.get("/api/users/auth")
-  },
-  async resetPassword(payload) {
-    await authClient.get("/sanctum/csrf-cookie");
-    return authClient.post("/reset-password", payload);
-  },
-  updatePassword(payload) {
-    return authClient.put("/user/password", payload);
   },
   async registerUser(payload) {
     await authClient.get("/sanctum/csrf-cookie");
     return authClient.post("/register", payload);
-  },
-  sendVerification(payload) {
-    return authClient.post("/email/verification-notification", payload);
-  },
-  updateUser(payload) {
-    return authClient.put("/user/profile-information", payload);
   },
 };
