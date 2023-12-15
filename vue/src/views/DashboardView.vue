@@ -92,6 +92,8 @@
       },
       openOverlay() {
         this.showOverlay = true;
+        this.form.title = '';
+        this.form.description = '';
       },
       closeOverlay() {
         this.showOverlay = false;
@@ -102,8 +104,8 @@
         formData.user_id = this.$store.state.auth.user.id;
         const todo = await TodoService.createTodo(this.form);
         this.todos.push(todo.data)
-        this.title = '';
-        this.description = '';
+        this.form.title = '';
+        this.form.description = '';
 
         this.closeOverlay()
       },
