@@ -1,0 +1,1 @@
+Task {{ $todo->title }} has been closed
