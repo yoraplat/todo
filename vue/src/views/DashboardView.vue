@@ -79,7 +79,7 @@
       },
       async fetchTodos() {
         try {
-          const todos = await TodoService.getByUserId(this.user.id);
+          const todos = await TodoService.getTodos(this.user.id);
 
           this.todos = todos.data.data;
           this.incompleteTodos = this.todos.filter(todo => !todo.is_completed);
