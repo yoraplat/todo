@@ -76,4 +76,20 @@ class TodoTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('todos', ['id' => $todo->id]);
     }
+    
+    /**
+     * Test searching for todo's.
+     */
+    public function testSearchTodo(): void
+    {
+        $user = User::factory(1)->createOne();
+        Sanctum::actingAs($user);
+
+        $todo = Todo::factory()->createOne(['title' => 'test todo number 1']);
+        Todo::factory(9)->create();
+
+        $searchTerm = urlencode($todo->title);
+        $response = $this->get("/api/todos?search=" . $searchTerm);
+        $response->assertStatus(200)->assertJsonCount(1, 'data');
+    }
 }
