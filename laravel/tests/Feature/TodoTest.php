@@ -15,7 +15,7 @@ class TodoTest extends TestCase
     /**
      * Test fetching todos by user ID.
      */
-    public function testGetTodosByUserId(): void
+    public function testGetTodos(): void
     {
         $user = User::factory(1)->createOne();
         Todo::factory(10)->create(['user_id' => $user->id, 'is_completed' => false]);
@@ -23,7 +23,7 @@ class TodoTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $response = $this->get("/api/todos/user/{$user->id}");
+        $response = $this->get("/api/todos");
         $response->assertStatus(200)->assertJsonCount(10, 'data');
     }
 
