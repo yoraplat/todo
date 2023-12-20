@@ -39,7 +39,7 @@ class TodoTest extends TestCase
 
         $todo->is_completed = true;
         
-        $response = $this->patch("api/todos/{$todo->id}/update", $todo->toArray());
+        $response = $this->patch("api/todos/{$todo->id}", $todo->toArray());
 
         $response->assertStatus(200)->assertJsonFragment($todo->toArray());
     }
