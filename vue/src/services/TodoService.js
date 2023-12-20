@@ -27,8 +27,13 @@ todoClient.interceptors.response.use(
 );
 
 export default {
-  async getTodos() {
-    return todoClient.get(`/api/todos`);
+  async getTodos(search) {
+    let uri = '/api/todos';
+
+    if (search) {
+      uri = `/api/todos?search=${search}`;
+    }
+    return todoClient.get(uri);
   },
   async finishTodo(todo) {
     const res = await todoClient.patch(`/api/todos/${todo.id}`, todo);

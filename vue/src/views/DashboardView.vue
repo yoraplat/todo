@@ -1,7 +1,20 @@
 <template>
-  <div class="mb-5 ml-[15px]">
-    <button class="bg-black text-white py-[8px] px-[15px] border-2 border-black duration-300 hover:bg-white hover:text-black rounded" @click="toggleCompleted">Show {{ this.showAll ? 'open' : 'all' }} tasks</button>
-    <button class="bg-black ml-2 text-white py-[8px] px-[15px] border-2 border-black duration-300 hover:bg-white hover:text-black rounded" @click="openOverlay">New</button>
+  <div class="mb-5 mx-[15px] flex justify-between">
+    <div>
+      <button class="bg-black text-white py-[8px] px-[15px] border-2 border-black duration-300 hover:bg-white hover:text-black rounded" @click="toggleCompleted">Show {{ this.showAll ? 'open' : 'all' }} tasks</button>
+      <button class="bg-black ml-2 text-white py-[8px] px-[15px] border-2 border-black duration-300 hover:bg-white hover:text-black rounded" @click="openOverlay">New</button>
+    </div>
+    <div class="searchbar w-fit">
+      <input
+        class="py-2 px-3 border-2 border-black rounded-lg outline-none"
+        type="search"
+        name="search"
+        id="search"
+        placeholder="Search Todo's"
+        v-model="search"
+        @input="handleSearchInput"
+      >
+    </div>
   </div>
 
   <div class="fixed bg-black/50 w-full h-full top-0 flex justify-center items-center" :class="{ 'hidden' : !showOverlay}">
@@ -50,6 +63,8 @@
     data() {
       return {
         todos: [],
+        search: null,
+        debounceTimeout: 1300,
         incompleteTodos: [],
         showOverlay: false,
         showAll: false,
@@ -64,6 +79,13 @@
       this.fetchTodos();
     },
     methods: {
+      handleSearchInput() {
+        clearTimeout(this.debounceTimeout);
+
+        this.debounceTimeout = setTimeout(() => {
+          this.fetchTodos();
+        }, 500);
+      },
       async toggleTask(todo) {
         try {
           if (todo.is_completed) {
@@ -79,7 +101,7 @@
       },
       async fetchTodos() {
         try {
-          const todos = await TodoService.getTodos(this.user.id);
+          const todos = await TodoService.getTodos(this.search);
 
           this.todos = todos.data.data;
           this.incompleteTodos = this.todos.filter(todo => !todo.is_completed);
