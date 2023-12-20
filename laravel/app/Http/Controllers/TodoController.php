@@ -8,6 +8,7 @@ use App\Jobs\SendMails;
 use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TodoController extends Controller
 {
@@ -16,8 +17,18 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $todos = User::find(Auth::id());
-        return TodoResource::collection($todos->todos()->get());
+        $todos = QueryBuilder::for(Todo::class)
+            ->allowedFilters(['search'])
+            ->where('user_id', Auth::id())
+            ->when(request('search'), function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->orWhere('title', 'like', '%' . $search . '%')
+                        ->orWhere('description', 'like', '%' . $search . '%');
+                });
+            })
+            ->get();
+
+        return TodoResource::collection($todos);
     }
 
     /**
