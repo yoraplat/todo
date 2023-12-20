@@ -21,10 +21,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('/users/auth', AuthController::class);
-  // Route::get('/users/{user}', [UserController::class, 'show']);
-  
-  Route::get('/todos/user/{user}', [TodoController::class, 'getByUserId']);
-  Route::patch('/todos/{todo}/update', [TodoController::class, 'update']);
-  Route::post('/todos', [TodoController::class, 'store']);
-  Route::delete('/todos/{todo}', [TodoController::class, 'destroy']);
+
+  Route::prefix('todos')->group(function () {
+    Route::get('/', [TodoController::class, 'index']);
+    Route::patch('/{todo}/update', [TodoController::class, 'update']);
+    Route::post('/', [TodoController::class, 'store']);
+    Route::delete('/{todo}', [TodoController::class, 'destroy']);
+  });
 });

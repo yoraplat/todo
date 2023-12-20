@@ -27,8 +27,8 @@ todoClient.interceptors.response.use(
 );
 
 export default {
-  async getByUserId(user_id) {
-    return todoClient.get(`/api/todos/user/${user_id}`);
+  async getTodos() {
+    return todoClient.get(`/api/todos`);
   },
   async finishTodo(todo) {
     const res = await todoClient.patch(`/api/todos/${todo.id}/update`, todo);

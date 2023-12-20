@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Jobs\SendMails;
-use App\Mail\TaskCompleted;
 use App\Models\Todo;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class TodoController extends Controller
 {
@@ -19,15 +16,8 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $todos = User::find(Auth::id());
+        return TodoResource::collection($todos->todos()->get());
     }
 
     /**
@@ -45,14 +35,6 @@ class TodoController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }
