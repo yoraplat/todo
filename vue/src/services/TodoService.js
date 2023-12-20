@@ -31,7 +31,7 @@ export default {
     return todoClient.get(`/api/todos`);
   },
   async finishTodo(todo) {
-    const res = await todoClient.patch(`/api/todos/${todo.id}/update`, todo);
+    const res = await todoClient.patch(`/api/todos/${todo.id}`, todo);
     return res.data;
   },
   async createTodo(todo) {
