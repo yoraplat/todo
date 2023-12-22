@@ -8,20 +8,24 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
-class UserSeeder extends Seeder
+class AdminSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('users')->insert([
+        $admin = new User([
             'name' => 'Yoram Platteeuw',
-            'email' => 'yoram.platteeuw@telenet.be',
+            'email' => 'yoram@classid.be',
             'email_verified_at' => null,
             'password' => bcrypt('secret'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        $admin->save();
+
+        // Give role
+        $admin->assignRole('admin');
     }
 }

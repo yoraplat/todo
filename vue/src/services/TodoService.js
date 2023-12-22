@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "@/store";
+import { checkRoles } from "@/helpers/rolesHelper";
 
 export const todoClient = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -28,15 +29,30 @@ todoClient.interceptors.response.use(
 
 export default {
   async getTodos(search) {
+    
     let uri = '/api/todos';
-
-    if (search) {
-      uri = `/api/todos?search=${search}`;
+    if (checkRoles(store.getters["auth/authUser"], ['admin'])) {
+      
+      uri = '/api/admin/todos';
+      if (search) {
+        uri = `/api/admin/todos?search=${search}`;
+      }
+    } else {
+      if (search) {
+        uri = `/api/todos?search=${search}`;
+      }
     }
+
     return todoClient.get(uri);
   },
   async finishTodo(todo) {
-    const res = await todoClient.patch(`/api/todos/${todo.id}`, todo);
+    let uri = `/api/todos/${todo.id}`;
+
+    if (checkRoles(store.getters["auth/authUser"], ['admin'])) {
+      uri = `/api/admin/todos/${todo.id}`
+    }
+
+    const res = await todoClient.patch(uri, todo);
     return res.data;
   },
   async createTodo(todo) {
@@ -44,7 +60,13 @@ export default {
     return res.data;
   },
   async deleteTodo(todo) {
-    const res = await todoClient.delete(`/api/todos/${todo.id}`, todo);
+    let uri = `/api/todos/${todo.id}`;
+
+    if (checkRoles(store.getters["auth/authUser"], ['admin'])) {
+      uri = `/api/admin/todos/${todo.id}`
+    }
+
+    const res = await todoClient.delete(uri, todo);
     return res.data;
   }
 };
