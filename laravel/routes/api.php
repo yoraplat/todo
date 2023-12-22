@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\TodoController as AdminTodoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TodoController;
 use App\Http\Resources\TodoResource;
@@ -27,5 +28,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/{todo}', [TodoController::class, 'update']);
     Route::post('/', [TodoController::class, 'store']);
     Route::delete('/{todo}', [TodoController::class, 'destroy']);
+    
+  });
+  
+  Route::middleware(['can:edit user tasks', 'can:delete user tasks'])->prefix('admin/todos')->group(function () {
+    Route::get('/', [AdminTodoController::class, 'index']);
+    Route::patch('/{todo}', [AdminTodoController::class, 'update']);
+    Route::post('/', [AdminTodoController::class, 'store']);
+    Route::delete('/{todo}', [AdminTodoController::class, 'destroy']);
   });
 });

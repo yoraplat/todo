@@ -16,7 +16,10 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
+            PermissionSeeder::class,
             UserSeeder::class,
+            AdminSeeder::class,
+            
         ]);
         
         Todo::factory(30)->create();

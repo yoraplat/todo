@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\TodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Jobs\SendMails;
 use App\Models\Todo;
-use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -19,7 +20,6 @@ class TodoController extends Controller
     {
         $todos = QueryBuilder::for(Todo::class)
             ->allowedFilters(['search'])
-            ->where('user_id', Auth::id())
             ->when(request('search'), function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->orWhere('title', 'like', '%' . $search . '%')
@@ -56,13 +56,6 @@ class TodoController extends Controller
      */
     public function update(TodoRequest $request, Todo $todo)
     {
-        if (Auth::id() != $request->user_id) {
-            return response()->json([
-                'message' => 'Todo does not belong to this user',
-                'data' => $todo,
-            ], 403);
-        }
-
         $todo->update($request->validated());
 
         if ($todo->is_completed) {
@@ -80,21 +73,10 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        if ($todo->user_id == Auth::id()) {
-            $todo->delete();
-        }
+        $todo->delete();
 
         return response()->json([
             'message' => 'Todo deleted successfully',
         ], 204);
-    }
-
-
-    /**
-     * Display the specified resources by userId.
-     */
-    public function getByUserId(User $user)
-    {
-      return TodoResource::collection($user->todos()->get());
     }
 }
